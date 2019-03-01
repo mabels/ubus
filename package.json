@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/mabels/ubus#readme",
   "devDependencies": {
-    "@types/jest": "23.3.3",
+    "@types/jest": "24.0.9",
     "@types/rimraf": "2.0.2",
     "@types/uuid": "3.4.3",
     "rimraf": "2.6.3",
