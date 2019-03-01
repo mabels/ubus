@@ -1,5 +1,5 @@
-import { UContainer, UMsgType, UAction, UMsg } from './ubus-types';
-import { UMsgTyp2String } from './ubus-msg-type';
+import { UContainer, UMsgType, UAction, UMsg } from './micbus-types';
+import { UMsgTyp2String } from './micbus-msg-type';
 
 export class UContainerBase<T = unknown> implements UContainer<T> {
   public readonly msgTypeKey: string;

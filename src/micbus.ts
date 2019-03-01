@@ -1,32 +1,32 @@
 import * as uuid from 'uuid';
-import { UbusCore } from './ubus-core';
-import { UMsgType, UMsg, UAction, UBusOpts, UbusProps, UMsgToSend, UbusHandler } from './ubus-types';
-import { UMsgTyp2String } from './ubus-msg-type';
-import { UContainerBase, UContainerStore } from './ubus-container';
-import { UbusHandleCallback } from './ubus-handler';
+import { MicBusCore } from './micbus-core';
+import { UMsgType, UMsg, UAction, MicBusOpts, MicBusProps, UMsgToSend, MicBusHandler } from './micbus-types';
+import { UMsgTyp2String } from './micbus-msg-type';
+import { UContainerBase, UContainerStore } from './micbus-container';
+import { MicBusHandleCallback } from './micbus-handler';
 
-const UBoxOptsDefault: UBusOpts = {
+const UBoxOptsDefault: MicBusOpts = {
   containterFactory: (msgType: UMsgType): UContainerBase => {
     return new UContainerStore(msgType);
   }
 };
 
-export class Ubus {
+export class MicBus {
   public readonly appName: string;
 
   public readonly type2Container: Map<string, UContainerBase> = new Map();
 
-  public static create(appName = 'ubus'): Ubus {
-    const ubus = new Ubus({ appName });
-    UbusCore.start(ubus);
-    return ubus;
+  public static create(appName = 'micbus'): MicBus {
+    const micbus = new MicBus({ appName });
+    MicBusCore.start(micbus);
+    return micbus;
   }
 
-  private constructor(props: UbusProps) {
+  private constructor(props: MicBusProps) {
     this.appName = props.appName;
   }
 
-  private upSetUContainer(type: UMsgType, opts: UBusOpts): UContainerBase {
+  private upSetUContainer(type: UMsgType, opts: MicBusOpts): UContainerBase {
     const msgType = UMsgTyp2String(type);
     let ucontainer = this.type2Container.get(msgType);
     if (!ucontainer) {
@@ -47,7 +47,7 @@ export class Ubus {
     // console.log('send', toSend);
     const ucontainer = this.upSetUContainer(toSend.type, opts);
     if (ucontainer.setMsg(toSend)) {
-      UbusCore.sendSend(this, toSend);
+      MicBusCore.sendSend(this, toSend);
     }
     return toSend;
   }
@@ -56,14 +56,14 @@ export class Ubus {
     msg: UMsgType,
     cb?: UAction<T>,
     opts = UBoxOptsDefault
-  ): Promise<UbusHandler> {
+  ): Promise<MicBusHandler> {
     const ucontainer = this.upSetUContainer(msg, opts);
     if (cb) {
       ucontainer.upSetAction(cb);
-      if (await UbusCore.registerSend(this, ucontainer, cb)) {
+      if (await MicBusCore.registerSend(this, ucontainer, cb)) {
         ucontainer.triggerAction(cb);
       }
-      return new UbusHandleCallback(this, ucontainer, cb);
+      return new MicBusHandleCallback(this, ucontainer, cb);
     }
     return {
       unregister: () => Promise.resolve()

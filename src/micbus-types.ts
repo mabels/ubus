@@ -1,6 +1,6 @@
-import { UContainerBase } from './ubus-container';
+import { UContainerBase } from './micbus-container';
 
-export interface UbusProps {
+export interface MicBusProps {
   readonly appName: string;
 }
 
@@ -33,10 +33,10 @@ export interface UContainer<T> {
   readonly actions: UAction[];
 }
 
-export interface UBusOpts {
+export interface MicBusOpts {
   containterFactory(msgType: UMsgType): UContainerBase;
 }
 
-export interface UbusHandler {
+export interface MicBusHandler {
   unregister(): Promise<void>;
 }

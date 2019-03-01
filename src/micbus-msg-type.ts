@@ -1,4 +1,4 @@
-import { UMsgType } from './ubus-types';
+import { UMsgType } from './micbus-types';
 
 export function UMsgTypeEq(n1: UMsgType, n2: UMsgType): boolean {
   let ret = n1.name === n2.name && n1.namespace.length === n2.namespace.length;

@@ -1,9 +1,9 @@
-import { UMsg, UMsgType, UAction, UContainer } from './ubus-types';
-import { UMsgTypeSync, UMsgTypeEq } from './ubus-msg-type';
-import { Ubus } from './ubus';
-import { UContainerBase } from './ubus-container';
+import { UMsg, UMsgType, UAction, UContainer } from './micbus-types';
+import { UMsgTypeSync, UMsgTypeEq } from './micbus-msg-type';
+import { MicBus } from './micbus';
+import { UContainerBase } from './micbus-container';
 
-export namespace UbusCore {
+export namespace MicBusCore {
   export interface Send<T> {
     msg: UMsg<T>;
   }
@@ -12,13 +12,13 @@ export namespace UbusCore {
   };
 
   export declare type SendMsg<T = unknown> = UMsg<Send<T>>;
-  export const SendType = UMsgTypeSync('ubus.send');
+  export const SendType = UMsgTypeSync('micbus.send');
   export async function sendSend<T>(
-    ubus: Ubus,
+    micbus: MicBus,
     msg: UMsg<T>
   ): Promise<SendMsg<T>> {
     if (!UMsgTypeEq(msg.type, SendType)) {
-      return ubus.send<Send<T>>(
+      return micbus.send<Send<T>>(
         {
           type: SendType,
           payload: {
@@ -34,15 +34,15 @@ export namespace UbusCore {
     readonly fn: UAction<T>;
   }
   export declare type RegisterMsg<T = unknown> = UMsg<Register<T>>;
-  export const RegisterType = UMsgTypeSync('ubus.register');
+  export const RegisterType = UMsgTypeSync('micbus.register');
 
   export async function registerSend<T>(
-    ubus: Ubus,
+    micbus: MicBus,
     container: UContainerBase<T>,
     fn: UAction<T>
   ): Promise<RegisterMsg<T>> {
     if (!UMsgTypeEq(container.msgType, RegisterType)) {
-      return ubus.send(
+      return micbus.send(
         {
           type: RegisterType,
           payload: {
@@ -57,15 +57,15 @@ export namespace UbusCore {
     }
   }
 
-  export const UnRegisterType = UMsgTypeSync('ubus.unregister');
+  export const UnRegisterType = UMsgTypeSync('micbus.unregister');
 
   export async function unregisterSend<T>(
-    ubus: Ubus,
+    micbus: MicBus,
     container: UContainerBase<T>,
     fn: UAction<T>
   ): Promise<RegisterMsg<T>> {
     if (!UMsgTypeEq(container.msgType, UnRegisterType)) {
-      return ubus.send(
+      return micbus.send(
         {
           type: UnRegisterType,
           payload: {
@@ -79,9 +79,9 @@ export namespace UbusCore {
       );
     }
   }
-  export function start(ubus: Ubus): void {
-    ubus.register(UbusCore.SendType, undefined, Opts);
-    ubus.register(UbusCore.RegisterType, undefined, Opts);
-    ubus.register(UbusCore.UnRegisterType, undefined, Opts);
+  export function start(micbus: MicBus): void {
+    micbus.register(MicBusCore.SendType, undefined, Opts);
+    micbus.register(MicBusCore.RegisterType, undefined, Opts);
+    micbus.register(MicBusCore.UnRegisterType, undefined, Opts);
   }
 }

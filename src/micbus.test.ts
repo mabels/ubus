@@ -1,25 +1,25 @@
 import {
-  Ubus,
+  MicBus,
   UMsg,
-  UbusCore,
+  MicBusCore,
   UMsgTypeCreate,
   UMsgTyp2String,
   UMsgTypeEq
 } from '.';
 
-test('ubus create', () => {
-  const ubus = Ubus.create('app-name');
-  expect(ubus).toBeTruthy();
-  expect(ubus.appName).toBe('app-name');
+test('micbus create', () => {
+  const micbus = MicBus.create('app-name');
+  expect(micbus).toBeTruthy();
+  expect(micbus.appName).toBe('app-name');
 });
 
-test('ubus default name create', () => {
-  const ubus = Ubus.create();
-  expect(ubus).toBeTruthy();
-  expect(ubus.appName).toBe('ubus');
+test('micbus default name create', () => {
+  const micbus = MicBus.create();
+  expect(micbus).toBeTruthy();
+  expect(micbus.appName).toBe('micbus');
 });
 
-test('ubus msgType', async () => {
+test('micbus msgType', async () => {
   const pmsg = UMsgTypeCreate('meno');
   expect(pmsg).toBeInstanceOf(Promise);
   const msg = await pmsg;
@@ -27,49 +27,49 @@ test('ubus msgType', async () => {
   expect(msg.name).toEqual('meno');
 });
 
-test('ubus msgType with namespace', async () => {
+test('micbus msgType with namespace', async () => {
   const msg = await UMsgTypeCreate('');
   expect(msg.namespace).toEqual([]);
   expect(msg.name).toEqual('');
 });
 
-test('ubus msgType with namespace', async () => {
+test('micbus msgType with namespace', async () => {
   const msg = await UMsgTypeCreate('hund.meno');
   expect(msg.namespace).toEqual(['hund']);
   expect(msg.name).toEqual('meno');
 });
 
-test('ubus msgType with namespace', async () => {
+test('micbus msgType with namespace', async () => {
   const msg = await UMsgTypeCreate('hund....meno');
   expect(msg.namespace).toEqual(['hund']);
   expect(msg.name).toEqual('meno');
 });
 
-test('ubus msgType with namespace', async () => {
+test('micbus msgType with namespace', async () => {
   const msg = await UMsgTypeCreate('.meno');
   expect(msg.namespace).toEqual([]);
   expect(msg.name).toEqual('meno');
 });
 
-test('ubus msgType with namespace', async () => {
+test('micbus msgType with namespace', async () => {
   const msg = await UMsgTypeCreate('meno.');
   expect(msg.namespace).toEqual(['meno']);
   expect(msg.name).toEqual('');
 });
 
-test('ubus msgType with namespace', async () => {
+test('micbus msgType with namespace', async () => {
   const msg = await UMsgTypeCreate('.meno.');
   expect(msg.namespace).toEqual(['meno']);
   expect(msg.name).toEqual('');
 });
 
-test('ubus msgType with namespace', async () => {
+test('micbus msgType with namespace', async () => {
   const msg = await UMsgTypeCreate('meno.katze.meno');
   expect(msg.namespace).toEqual(['meno', 'katze']);
   expect(msg.name).toEqual('meno');
 });
 
-test('ubus msgType with namespace', async () => {
+test('micbus msgType with namespace', async () => {
   const msg = await UMsgTypeCreate('meno.katze.meno.');
   expect(msg.namespace).toEqual(['meno', 'katze', 'meno']);
   expect(msg.name).toEqual('');
@@ -91,10 +91,10 @@ test('umsg2string', async () => {
   expect(UMsgTyp2String(await UMsgTypeCreate('.meno.doof.'))).toBe('meno.doof.');
 });
 
-test('ubus send msg', async () => {
-  const ubus = Ubus.create('app-name');
+test('micbus send msg', async () => {
+  const micbus = MicBus.create('app-name');
   const type = await UMsgTypeCreate('meno');
-  const msg = await ubus.send({ type });
+  const msg = await micbus.send({ type });
   expect(msg.id).toBeTruthy();
   expect(msg.src).toBeTruthy();
   expect(msg.dst).toBe('*');
@@ -102,10 +102,10 @@ test('ubus send msg', async () => {
   expect(msg.payload).toBeFalsy();
 });
 
-test('ubus send msg full', async () => {
-  const ubus = Ubus.create('app-name');
+test('micbus send msg full', async () => {
+  const micbus = MicBus.create('app-name');
   const type = await UMsgTypeCreate('meno');
-  const msg = await ubus.send({
+  const msg = await micbus.send({
     id: 'id',
     src: 'src',
     dst: 'dst',
@@ -119,47 +119,47 @@ test('ubus send msg full', async () => {
   expect(msg.payload).toBe('payload');
 });
 
-test('ubus pre register event', done => {
+test('micbus pre register event', done => {
   (async () => {
-    const ubus = Ubus.create('app-name');
+    const micbus = MicBus.create('app-name');
     const type = await UMsgTypeCreate('meno');
     let msg: UMsg;
-    await ubus.register(type, inMsg => {
+    await micbus.register(type, inMsg => {
       expect(msg).toBe(inMsg);
       done();
     });
-    msg = await ubus.send({
+    msg = await micbus.send({
       type,
       payload: 'payload'
     });
   })();
 });
 
-test('ubus post register events', done => {
+test('micbus post register events', done => {
   (async () => {
-    const ubus = Ubus.create('app-name');
+    const micbus = MicBus.create('app-name');
     const type = await UMsgTypeCreate('meno');
-    const msg = await ubus.send({
+    const msg = await micbus.send({
       id: 'id',
       src: 'src',
       dst: 'dst',
       type,
       payload: 'payload'
     });
-    await ubus.register(type, inMsg => {
+    await micbus.register(type, inMsg => {
       expect(msg).toBe(inMsg);
       done();
     });
   })();
 });
 
-test('ubus pre multiple register events', done => {
+test('micbus pre multiple register events', done => {
   (async () => {
-    const ubus = Ubus.create('app-name');
+    const micbus = MicBus.create('app-name');
     const type = await UMsgTypeCreate('meno');
     await Promise.all(
       ['a', 'b', 'c', 'd'].map(i =>
-        ubus.send({
+        micbus.send({
           id: `id${i}`,
           src: 'src',
           dst: 'dst',
@@ -168,20 +168,20 @@ test('ubus pre multiple register events', done => {
         })
       )
     );
-    await ubus.register(type, inMsg => {
+    await micbus.register(type, inMsg => {
       expect(inMsg.id).toBe('idd');
       done();
     });
   })();
 });
 
-test('ubus post multiple register events', done => {
+test('micbus post multiple register events', done => {
   (async () => {
-    const ubus = Ubus.create('app-name');
+    const micbus = MicBus.create('app-name');
     const type = await UMsgTypeCreate('meno');
     const data = ['a', 'b', 'c', 'd'];
     const fn = jest.fn();
-    await ubus.register(type, inMsg => {
+    await micbus.register(type, inMsg => {
       fn(inMsg);
       if (fn.mock.calls.length == data.length) {
         expect(fn.mock.calls.map(i => i[0].id)).toEqual([
@@ -195,7 +195,7 @@ test('ubus post multiple register events', done => {
     });
     await Promise.all(
       data.map(i =>
-        ubus.send({
+        micbus.send({
           id: `id${i}`,
           src: 'src',
           dst: 'dst',
@@ -207,13 +207,13 @@ test('ubus post multiple register events', done => {
   })();
 });
 
-test('ubus post multiple register events', done => {
+test('micbus post multiple register events', done => {
   (async () => {
-    const ubus = Ubus.create('app-name');
+    const micbus = MicBus.create('app-name');
     const type = await UMsgTypeCreate('meno');
     const data = ['a', 'b', 'c', 'd'];
     const fn = jest.fn();
-    await ubus.register(type, inMsg => {
+    await micbus.register(type, inMsg => {
       fn(inMsg);
       if (fn.mock.calls.length == data.length) {
         expect(fn.mock.calls.map(i => i[0].id)).toEqual([
@@ -225,7 +225,7 @@ test('ubus post multiple register events', done => {
         done();
       }
     });
-    const handle = await ubus.register(type, async inMsg => {
+    const handle = await micbus.register(type, async inMsg => {
       if (inMsg.id == 'ida') {
         await handle.unregister();
         return;
@@ -234,7 +234,7 @@ test('ubus post multiple register events', done => {
     });
     await Promise.all(
       data.map(i =>
-        ubus.send({
+        micbus.send({
           id: `id${i}`,
           src: 'src',
           dst: 'dst',
@@ -246,9 +246,9 @@ test('ubus post multiple register events', done => {
   })();
 });
 
-test('ubus multiple register handle', done => {
+test('micbus multiple register handle', done => {
   (async () => {
-    const ubus = Ubus.create('app-name');
+    const micbus = MicBus.create('app-name');
     const type = await UMsgTypeCreate('meno');
     const fns = ['fn1', 'fn2', 'fn3', 'fn4'];
     const msg = ['a', 'b', 'c', 'd'];
@@ -256,7 +256,7 @@ test('ubus multiple register handle', done => {
     await Promise.all(
       fns.map(fn => {
         const my = jest.fn((_: UMsg) => fn);
-        return ubus.register(type, inMsg => {
+        return micbus.register(type, inMsg => {
           my(inMsg);
           if (my.mock.calls.length === msg.length) {
             expect(my.mock.calls.map(i => i[0].id)).toEqual([
@@ -275,7 +275,7 @@ test('ubus multiple register handle', done => {
     );
     await Promise.all(
       ['a', 'b', 'c', 'd'].map(i =>
-        ubus.send({
+        micbus.send({
           id: `id${i}`,
           src: 'src',
           dst: 'dst',
@@ -287,12 +287,12 @@ test('ubus multiple register handle', done => {
   })();
 });
 
-test('ubus send core event', done => {
+test('micbus send core event', done => {
   (async () => {
-    const ubus = Ubus.create('app-name');
+    const micbus = MicBus.create('app-name');
     const type = await UMsgTypeCreate('meno');
     const collector = jest.fn();
-    await ubus.register(UbusCore.SendType, (inMsg: UbusCore.SendMsg<UMsg>) => {
+    await micbus.register(MicBusCore.SendType, (inMsg: MicBusCore.SendMsg<UMsg>) => {
       collector(inMsg);
       // console.log(inMsg.payload.msg.type);
       if (UMsgTypeEq(inMsg.payload.msg.type, type)) {
@@ -300,16 +300,16 @@ test('ubus send core event', done => {
         expect(
           UMsgTypeEq(
             collector.mock.calls[0][0].payload.msg.type,
-            UbusCore.RegisterType
+            MicBusCore.RegisterType
           )
         ).toBeTruthy();
-        expect(UMsgTypeEq(inMsg.type, UbusCore.SendType)).toBeTruthy();
+        expect(UMsgTypeEq(inMsg.type, MicBusCore.SendType)).toBeTruthy();
         expect(inMsg.payload.msg.id).toBe('idjo');
         expect(inMsg.payload.msg.payload).toBe('payload');
         done();
       }
     });
-    await ubus.send({
+    await micbus.send({
       id: `idjo`,
       src: 'src',
       dst: 'dst',
@@ -319,17 +319,17 @@ test('ubus send core event', done => {
   })();
 });
 
-test('ubus register core event', done => {
+test('micbus register core event', done => {
   (async () => {
-    const ubus = Ubus.create('app-name');
+    const micbus = MicBus.create('app-name');
     const type = await UMsgTypeCreate('meno');
     const _42 = () => 42;
     const collector = jest.fn();
-    await ubus.register(
-      UbusCore.UnRegisterType,
-      (inMsg: UbusCore.RegisterMsg) => {
+    await micbus.register(
+      MicBusCore.UnRegisterType,
+      (inMsg: MicBusCore.RegisterMsg) => {
         try {
-          expect(UMsgTypeEq(inMsg.type, UbusCore.UnRegisterType)).toBeTruthy();
+          expect(UMsgTypeEq(inMsg.type, MicBusCore.UnRegisterType)).toBeTruthy();
           expect(
             UMsgTypeEq(inMsg.payload.container.msgType, type)
           ).toBeTruthy();
@@ -341,13 +341,13 @@ test('ubus register core event', done => {
         }
       }
     );
-    await ubus.register(
-      UbusCore.RegisterType,
-      (inMsg: UbusCore.RegisterMsg) => {
+    await micbus.register(
+      MicBusCore.RegisterType,
+      (inMsg: MicBusCore.RegisterMsg) => {
         collector(inMsg);
         try {
           if (UMsgTypeEq(inMsg.payload.container.msgType, type)) {
-            expect(UMsgTypeEq(inMsg.type, UbusCore.RegisterType)).toBeTruthy();
+            expect(UMsgTypeEq(inMsg.type, MicBusCore.RegisterType)).toBeTruthy();
             expect(
               UMsgTypeEq(inMsg.payload.container.msgType, type)
             ).toBeTruthy();
@@ -359,6 +359,6 @@ test('ubus register core event', done => {
         }
       }
     );
-    await (await ubus.register(type, _42)).unregister();
+    await (await micbus.register(type, _42)).unregister();
   })();
 });
