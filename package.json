@@ -9,18 +9,15 @@
   },
   "scripts": {
     "clean": "rimraf lib esm",
-    "build": "npm run build:commonjs && npm run build:esm",
+    "build": "yarn build:commonjs && yarn build:esm",
     "build:commonjs": "tsc --project .",
     "build:esm": "tsc --project . --outdir esm --module esnext",
-    "prebuild": "npm run clean",
-    "compile": "tsc --project .",
     "test": "jest -c jest.unit.js",
+    "test:integration": "jest -c jest.integration.js",
     "lint": "tslint --project .",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w",
-    "preversion": "npm test",
-    "version": "npm run build && conventional-changelog -p angular -v -r 0 > CHANGELOG.md && git add -A .",
-    "postversion": "git push && git push --tags",
-    "prepublish": "not-in-install && npm run build || echo 'In install cycle, skipping prepublish'"
+    "prerelease": "git checkout master && git pull --ff-only origin master && yarn && yarn clean && yarn lint && yarn test && yarn build",
+    "release": "standard-version",
+    "postrelease": "git push --follow-tags origin master && npm publish"
   },
   "repository": {
     "type": "git",
