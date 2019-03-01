@@ -43,6 +43,7 @@
     "typescript": "3.3.3333"
   },
   "dependencies": {
+    "standard-version": "^5.0.1",
     "uuid": "3.3.2"
   },
   "publishConfig": {
