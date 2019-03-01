@@ -32,18 +32,18 @@
   },
   "homepage": "https://github.com/mabels/ubus#readme",
   "devDependencies": {
-    "@types/jest": "23.3.13",
+    "@types/jest": "23.3.3",
     "@types/rimraf": "2.0.2",
     "@types/uuid": "3.4.3",
     "rimraf": "2.6.3",
-    "jest": "23.6.0",
-    "jest-cli": "23.6.0",
-    "tslint": "5.12.1",
-    "prettier": "1.15.3",
-    "ts-jest": "23.10.5",
-    "ts-node": "8.0.1",
-    "depcheck": "0.7.1",
-    "typescript": "3.2.2"
+    "jest": "24.1.0",
+    "jest-cli": "24.1.0",
+    "tslint": "5.13.1",
+    "prettier": "1.16.4",
+    "ts-jest": "24.0.0",
+    "ts-node": "8.0.2",
+    "depcheck": "0.7.2",
+    "typescript": "3.3.3333"
   },
   "dependencies": {
     "uuid": "3.3.2"
