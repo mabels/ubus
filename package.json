@@ -1,0 +1,91 @@
+{
+  "name": "ubus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=6.9.5"
+  },
+  "scripts": {
+    "clean": "rimraf lib esm",
+    "build": "npm run build:commonjs && npm run build:esm",
+    "build:commonjs": "tsc --project .",
+    "build:esm": "tsc --project . --outdir esm --module esnext",
+    "prebuild": "npm run clean",
+    "compile": "tsc --project .",
+    "test": "jest -c jest.unit.js",
+    "lint": "tslint --project .",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w",
+    "preversion": "npm test",
+    "version": "npm run build && conventional-changelog -p angular -v -r 0 > CHANGELOG.md && git add -A .",
+    "postversion": "git push && git push --tags",
+    "prepublish": "not-in-install && npm run build || echo 'In install cycle, skipping prepublish'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "mabels/ubus"
+  },
+  "license": "AFL-2.0",
+  "bugs": {
+    "url": "https://github.com/mabels/ubus/issues"
+  },
+  "homepage": "https://github.com/mabels/ubus#readme",
+  "devDependencies": {
+    "@types/jest": "23.3.13",
+    "@types/rimraf": "2.0.2",
+    "@types/uuid": "3.4.3",
+    "rimraf": "2.6.3",
+    "jest": "23.6.0",
+    "jest-cli": "23.6.0",
+    "tslint": "5.12.1",
+    "prettier": "1.15.3",
+    "ts-jest": "23.10.5",
+    "ts-node": "8.0.1",
+    "depcheck": "0.7.1",
+    "typescript": "3.2.2"
+  },
+  "dependencies": {
+    "uuid": "3.3.2"
+  },
+  "publishConfig": {
+    "tag": "next"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "renovate": {
+    "extends": [
+      "config:base"
+    ],
+    "semanticPrefix": "chore:",
+    "devDependencies": {
+      "automerge": true
+    },
+    "packageRules": [
+      {
+        "packagePatterns": [
+          "@types/"
+        ],
+        "automerge": true
+      }
+    ]
+  },
+  "resolutions": {}
+}

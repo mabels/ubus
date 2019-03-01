@@ -1,0 +1,14 @@
+/index.js
+/index.d.ts
+/node_modules
+*.js.map
+/tests/*-test.js
+coverage/
+.nyc_output/
+npm-debug.log
+dist
+#test/all.ts
+src/**/*.js
+**/.dice-req-cache/
+/esm/**
+/lib/**
