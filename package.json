@@ -2,10 +2,16 @@
   "name": "micbus",
   "version": "1.0.4",
   "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "module": "esm/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "src",
+    "lib",
+    "esm"
+  ],
   "engines": {
-    "node": ">=6.9.5"
+    "node": ">=8.0.0"
   },
   "scripts": {
     "clean": "rimraf lib esm",
