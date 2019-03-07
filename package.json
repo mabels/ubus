@@ -45,7 +45,7 @@
     "tslint": "5.13.1",
     "prettier": "1.16.4",
     "ts-jest": "24.0.0",
-    "ts-node": "8.0.2",
+    "ts-node": "8.0.3",
     "depcheck": "0.7.2",
     "typescript": "3.3.3333"
   },
