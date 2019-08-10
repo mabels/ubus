@@ -39,7 +39,7 @@
     "@types/rimraf": "2.0.2",
     "@types/uuid": "3.4.4",
     "rimraf": "2.6.3",
-    "standard-version": "5.0.2",
+    "standard-version": "7.0.0",
     "jest": "24.5.0",
     "jest-cli": "24.5.0",
     "tslint": "5.14.0",
