@@ -47,7 +47,7 @@
     "ts-jest": "24.3.0",
     "ts-node": "8.6.2",
     "depcheck": "0.9.1",
-    "typescript": "3.7.4"
+    "typescript": "3.7.5"
   },
   "dependencies": {
     "uuid": "3.3.3"
